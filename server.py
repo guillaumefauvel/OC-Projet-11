@@ -42,7 +42,7 @@ def create_app():
 
     @app.route('/invalidemail')
     def invalidEmail():
-        """
+        """ 
         Inform the user that his email his not registered.
         """
         return render_template('wrongemail.html')
