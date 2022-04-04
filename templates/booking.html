@@ -6,6 +6,9 @@
 </head>
 <body>
     <h2>{{competition['name']}}</h2>
+    {% if get_flashed_messages() %}
+        <h3>You don't have enough points</h3>
+    {% endif %}
     Places available: {{competition['numberOfPlaces']}}
     <form action="/purchasePlaces" method="post">
         <input type="hidden" name="club" value="{{club['name']}}">
