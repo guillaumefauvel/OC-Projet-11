@@ -1,10 +1,15 @@
+import decorator
+
+from msilib import datasizemask
 import pytest
 import flask
+import urllib.request as urllib2
 
 from server import create_app
 
 @pytest.fixture
 def client():
+
     app = create_app()
     with app.test_client() as client:
         yield client
@@ -59,9 +64,9 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
 
 def test_without_credits(client):
     
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 100, "You don't have enough points", "bookFall%20ClassicIron%20Temple")
+    _competitions_assigment(client, "Fall Classic", "Iron Temple", 5, "You don't have enough points", "bookFall%20ClassicIron%20Temple")
     
-
+    
 def test_with_credits(client):
     
     _competitions_assigment(client, "Fall Classic", "Iron Temple", 1, "Great-booking complete!", "purchasePlaces")

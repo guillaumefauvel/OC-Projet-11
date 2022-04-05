@@ -1,3 +1,5 @@
+from ast import Num
+from pyparsing import nums
 import pytest
 from server import create_app
 
@@ -6,7 +8,6 @@ def client():
     app = create_app()
     with app.test_client() as client:
         yield client
-
 
 
 def _competitions_assigment(client, selected_competition, selected_club, placesRequired, pointLeft):
@@ -28,3 +29,19 @@ def test_points_substraction(client, competition, club, places, pointLeft):
     _competitions_assigment(client, competition, club, places, pointLeft)
     
 
+def _get_num_of_place(client):
+    
+        rv = client.post("/showSummary", data=dict(email='admin@irontemple.com'), follow_redirects=True)
+        index_ref = rv.data.decode().find("Fall Classic")
+        num_of_place = int(rv.data.decode()[index_ref:].split("Number of Places: ")[1][0:3])
+        
+        return num_of_place
+
+def test_places_substraction(client):
+    
+    number_before = _get_num_of_place(client)
+    _competitions_assigment(client, "Fall Classic", 'Iron Temple', 1, "Points available: 3")
+    number_after = _get_num_of_place(client)
+        
+    assert (number_before-1) == number_after
+    
