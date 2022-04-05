@@ -1,5 +1,6 @@
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for, abort
+from datetime import datetime
 
 def create_app():
 
@@ -36,8 +37,11 @@ def create_app():
             club = [club for club in clubs if club['email'] == request.form['email']][0]
         except IndexError:
             return redirect('/invalidemail')
-
-        return render_template('welcome.html', club=club, competitions=competitions)
+        
+        return render_template('welcome.html',
+                               club=club,
+                               competitions=competitions,
+                               time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
 
     @app.route('/invalidemail')
@@ -52,7 +56,11 @@ def create_app():
     def book(competition,club):
         foundClub = [c for c in clubs if c['name'] == club][0]
         foundCompetition = [c for c in competitions if c['name'] == competition][0]
-        if foundClub and foundCompetition:
+        actual_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if foundCompetition['date'] < actual_time:
+            return render_template('booking_not_allowed.html', club=foundClub, competition=foundCompetition)
+        elif foundClub and foundCompetition:
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
         else:
             flash("Something went wrong-please try again")
@@ -67,13 +75,13 @@ def create_app():
 
         competition = [c for c in competitions if c['name'] == selected_competition][0]
         club = [c for c in clubs if c['name'] == selected_club][0]
-                
+
         placesRequired = int(request.form['places'])
 
         if placesRequired > 12:
             flash('You cannot book more than 12 places')
             return redirect(f'/book/{selected_competition}/{selected_club}')
-        
+
         elif placesRequired < 0:
             flash('You need to specify a positive number')
             return redirect(f'/book/{selected_competition}/{selected_club}')

@@ -19,6 +19,12 @@
             "date": "2020-12-15 14:30:00",
             "numberOfPlaces": "14",
             "bookedPerClub": {}
+        },
+        {
+            "name": "Garigue Moutain",
+            "date": "2022-12-15 14:30:00",
+            "numberOfPlaces": "14",
+            "bookedPerClub": {}
         }
     ]
 }
