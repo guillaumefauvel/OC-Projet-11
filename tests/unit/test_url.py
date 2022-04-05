@@ -1,5 +1,3 @@
-import decorator
-
 from msilib import datasizemask
 import pytest
 import flask
@@ -21,9 +19,9 @@ def test_login_page(client):
     assert rv.status_code == 200
 
 
-def _login_user(client, email, expected_url, template_ref):
+def _login_user(client, email, expected_url, template_ref, time):
 
-    rv = client.post("/showSummary", data=dict(email=email), follow_redirects=True)
+    rv = client.post("/showSummary", data=dict(email=email, time=time), follow_redirects=True)
     url = (flask.request.url).split("/")[3]
 
     assert url == expected_url
@@ -33,12 +31,12 @@ def _login_user(client, email, expected_url, template_ref):
 
 def test_login_user_success(client):
 
-    _login_user(client, "admin@irontemple.com", "showSummary", "Summary | GUDLFT Registration")
+    _login_user(client, "admin@irontemple.com", "showSummary", "Summary | GUDLFT Registration", "2022-10-22 13:30:00")
 
 
 def test_login_user_failure(client):
 
-    _login_user(client, "bademail@mail.com", "invalidemail", "Invalid Email")
+    _login_user(client, "bademail@mail.com", "invalidemail", "Invalid Email", "2022-10-22 13:30:00")
 
 
 def test_summary_without_login(client):
@@ -48,30 +46,32 @@ def test_summary_without_login(client):
     assert rv.status_code == 405
 
 
-def _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url):
+def _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time):
 
     rv = client.post("/purchasePlaces", data=dict(competition=selected_competition,
-                                                club=selected_club,
-                                                places=placesRequired), 
-                    follow_redirects=True)
+                                                  club=selected_club,
+                                                  places=placesRequired,
+                                                  time=time), follow_redirects=True)
 
     url = "".join((flask.request.url).split("/")[3:])
 
+    print(url, expected_url)
     assert url == expected_url
+    
     assert rv.status_code == 200
     assert rv.data.decode().find(expected_msg) != -1
 
 
 def test_without_credits(client):
-    
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 5, "You don&#39;t have enough point", "bookFall%20ClassicIron%20Temple")
-    
-    
+
+    _competitions_assigment(client, "Fall Classic", "Iron Temple", 5, "You don&#39;t have enough point", "bookFall%20ClassicIron%20Temple", "2022-10-22 13:30:00")
+
+
 def test_with_credits(client):
-    
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 1, "Great-booking complete!", "purchasePlaces")
+
+    _competitions_assigment(client, "Fall Classic", "Iron Temple", 1, "Great-booking complete!", "purchasePlaces", "2022-10-22 13:30:00")
 
 
 def test_without_credit_spending(client):
-    
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 0, " ", "purchasePlaces")
+
+    _competitions_assigment(client, "Fall Classic", "Iron Temple", 0, " ", "purchasePlaces", "2022-10-22 13:30:00")

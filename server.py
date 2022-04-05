@@ -64,7 +64,7 @@ def create_app():
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
         else:
             flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions)
+            return render_template('welcome.html', club=club, competitions=competitions, time="2022-10-22 13:30:00")
 
 
     @app.route('/purchasePlaces',methods=['POST'])
@@ -108,7 +108,7 @@ def create_app():
         else:
             pass
 
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=club, competitions=competitions, time="welcome.html")
 
     # TODO: Add route for points display
 
