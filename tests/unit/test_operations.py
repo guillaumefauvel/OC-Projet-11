@@ -42,6 +42,7 @@ def test_places_substraction(client):
     number_before = _get_num_of_place(client)
     _competitions_assigment(client, "Fall Classic", 'Iron Temple', 1, "Points available: 3")
     number_after = _get_num_of_place(client)
-        
+
     assert (number_before-1) == number_after
-    
+
+
