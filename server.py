@@ -67,14 +67,32 @@ def create_app():
 
         competition = [c for c in competitions if c['name'] == selected_competition][0]
         club = [c for c in clubs if c['name'] == selected_club][0]
-
+                
         placesRequired = int(request.form['places'])
 
-        if int(club['points'])-placesRequired >= 0:
+        if placesRequired > 12:
+            flash('You cannot book more than 12 places')
+            return redirect(f'/book/{selected_competition}/{selected_club}')
+        
+        elif placesRequired < 0:
+            flash('You need to specify a positive number')
+            return redirect(f'/book/{selected_competition}/{selected_club}')
+
+        elif int(club['points'])-placesRequired >= 0:
+            try:
+                if competition['bookedPerClub'][club['name']] + placesRequired > 12:
+                    flash('You have reach your max reservation credit for this event')
+                    return redirect(f'/book/{selected_competition}/{selected_club}')
+                else:
+                    competition['bookedPerClub'][club['name']] += placesRequired
+            except KeyError:
+                competition['bookedPerClub'][club['name']] = placesRequired
+
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             club['points'] = int(club['points'])-placesRequired
-        else:
-            flash('')
+
+        elif int(club['points'])-placesRequired < 0:
+            flash('You don\'t have enough point')
             return redirect(f'/book/{selected_competition}/{selected_club}')
 
         if placesRequired != 0:
@@ -83,7 +101,6 @@ def create_app():
             pass
 
         return render_template('welcome.html', club=club, competitions=competitions)
-
 
     # TODO: Add route for points display
 

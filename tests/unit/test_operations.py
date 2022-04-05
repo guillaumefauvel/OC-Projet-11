@@ -1,5 +1,3 @@
-from ast import Num
-from pyparsing import nums
 import pytest
 from server import create_app
 
@@ -16,13 +14,15 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
                                                 club=selected_club,
                                                 places=placesRequired), 
                     follow_redirects=True)
-    
+    print(rv.data.decode())
     assert rv.status_code == 200
     assert rv.data.decode().find(pointLeft) != -1
     
         
 @pytest.mark.parametrize('competition, club, places, pointLeft',
-                         [('Fall Classic', 'Iron Temple', 50, "You don't have enough points"),
+                         [('Fall Classic', 'Iron Temple', -1, "You need to specify a positive number"),
+                          ('Fall Classic', 'Iron Temple', 50, "You cannot book more than 12 places"),
+                          ('Fall Classic', 'Iron Temple', 6, "You don&#39;t have enough point"),
                           ('Fall Classic', 'Iron Temple', 1, "Points available: 3"),
                           ('Fall Classic', 'Iron Temple', 0, "Points available: 4")])
 def test_points_substraction(client, competition, club, places, pointLeft):
@@ -44,5 +44,7 @@ def test_places_substraction(client):
     number_after = _get_num_of_place(client)
 
     assert (number_before-1) == number_after
+
+
 
 

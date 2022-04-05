@@ -64,7 +64,7 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
 
 def test_without_credits(client):
     
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 5, "You don't have enough points", "bookFall%20ClassicIron%20Temple")
+    _competitions_assigment(client, "Fall Classic", "Iron Temple", 5, "You don&#39;t have enough point", "bookFall%20ClassicIron%20Temple")
     
     
 def test_with_credits(client):
