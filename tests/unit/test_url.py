@@ -82,5 +82,5 @@ def test_booking_reservation(client, selected_competition, selected_club, places
         expected_url (str): The url we expect to get
         time (str): The time we expect - (2022-10-22 13:30:00)
     """
-    
+
     _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time)

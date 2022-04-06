@@ -1,14 +1,18 @@
 import json
 from pprint import pprint
+from re import L
 from flask import Flask, render_template, request, redirect, flash, url_for, abort
 from datetime import datetime
 
 def create_app():
     
+    test_mode = False
+    
     if __name__ == '__main__':
         clubs_db = 'clubs.json' 
         competitions_db = 'competitions.json'
     else:
+        test_mode = True
         clubs_db = 'tests/test_database/clubs.json' 
         competitions_db = 'tests/test_database/competitions.json'
 
@@ -18,10 +22,24 @@ def create_app():
             listOfClubs = json.load(c)['clubs']
             return listOfClubs
 
+
     def loadCompetitions():
         with open(competitions_db) as comps:
-            listOfCompetitions = json.load(comps)['competitions']
-            return listOfCompetitions
+            list_of_competition = json.load(comps)['competitions']
+            sorted_list_of_competition = sorted(list_of_competition, key=lambda x: x['date'], reverse=True)
+            return sorted_list_of_competition
+
+
+    def saveClubs(clubs):
+        with open(clubs_db, 'w') as c:
+            jstr = json.dumps(clubs, indent=4)
+            c.write('{'f'"clubs": {jstr}''}')
+
+
+    def saveCompetitions(competitions):
+        with open(competitions_db, 'w') as c:
+            jstr = json.dumps(competitions, indent=4)
+            c.write('{'f'"competitions": {jstr}''}')
 
 
     app = Flask(__name__)
@@ -30,6 +48,12 @@ def create_app():
     competitions = loadCompetitions()
     clubs = loadClubs()
 
+    def data_update(clubs, competitions):
+        
+        if not test_mode:
+            saveClubs(clubs)
+            saveCompetitions(competitions)
+        
 
     @app.route('/')
     def index():
@@ -72,7 +96,7 @@ def create_app():
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
         else:
             flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions, time="2022-10-22 13:30:00")
+            return render_template('welcome.html', club=club, competitions=competitions, time=actual_time)
 
 
     @app.route('/purchasePlaces',methods=['POST'])
@@ -80,7 +104,8 @@ def create_app():
 
         selected_competition = request.form['competition']
         selected_club = request.form['club']
-
+        actual_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
         competition = [c for c in competitions if c['name'] == selected_competition][0]
         club = [c for c in clubs if c['name'] == selected_club][0]
 
@@ -101,11 +126,14 @@ def create_app():
                     return redirect(f'/book/{selected_competition}/{selected_club}')
                 else:
                     competition['bookedPerClub'][club['name']] += placesRequired
+                    data_update(clubs, competitions)
             except KeyError:
                 competition['bookedPerClub'][club['name']] = placesRequired
+                data_update(clubs, competitions)
 
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             club['points'] = int(club['points'])-placesRequired
+            data_update(clubs, competitions)
 
         elif int(club['points'])-placesRequired < 0:
             flash('You don\'t have enough point')
@@ -115,8 +143,8 @@ def create_app():
             flash('Great-booking complete!')
         else:
             pass
-            
-        return render_template('welcome.html', club=club, competitions=competitions, time="welcome.html")
+        data_update(clubs, competitions)
+        return render_template('welcome.html', club=club, competitions=competitions, time=actual_time)
 
     # TODO: Add route for points display
 

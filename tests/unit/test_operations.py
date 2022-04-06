@@ -53,7 +53,7 @@ def _get_num_of_place(client, competition_index):
 
 @pytest.mark.parametrize('competition, club, places, message, time, competition_index',
                          [("Fall Classic", 'Iron Temple', 1, "Points available: 3", "2022-10-22 13:30:00", 2),
-                          ('Garigue Moutain', 'Iron Temple', 2, "Points available: 2", "2022-10-22 13:30:00", 4)])
+                          ('Garigue Moutain', 'Iron Temple', 2, "Points available: 2", "2022-10-22 13:30:00", 1)])
 def test_places_substraction(client, competition, club, places, message, time, competition_index):
     """ Verify if the places substraction is working correctly
 
