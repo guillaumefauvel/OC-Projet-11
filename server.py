@@ -1,9 +1,10 @@
 import json
+from pprint import pprint
 from flask import Flask, render_template, request, redirect, flash, url_for, abort
 from datetime import datetime
 
 def create_app():
-
+    
     if __name__ == '__main__':
         clubs_db = 'clubs.json' 
         competitions_db = 'competitions.json'
@@ -11,11 +12,11 @@ def create_app():
         clubs_db = 'tests/test_database/clubs.json' 
         competitions_db = 'tests/test_database/competitions.json'
 
+
     def loadClubs():
         with open(clubs_db) as c:
             listOfClubs = json.load(c)['clubs']
             return listOfClubs
-
 
     def loadCompetitions():
         with open(competitions_db) as comps:
@@ -25,7 +26,7 @@ def create_app():
 
     app = Flask(__name__)
     app.secret_key = 'something_special'
-
+    
     competitions = loadCompetitions()
     clubs = loadClubs()
 
@@ -114,7 +115,7 @@ def create_app():
             flash('Great-booking complete!')
         else:
             pass
-
+            
         return render_template('welcome.html', club=club, competitions=competitions, time="welcome.html")
 
     # TODO: Add route for points display

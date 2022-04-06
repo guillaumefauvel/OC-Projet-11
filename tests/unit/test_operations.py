@@ -1,9 +1,12 @@
+import unittest
 import pytest
 from server import create_app
 
 @pytest.fixture
 def client():
+
     app = create_app()
+
     with app.test_client() as client:
         yield client
 
@@ -32,14 +35,14 @@ def test_points_substraction(client, competition, club, places, Message, time):
 
 
 def _get_num_of_place(client, competition_index):
-    """ Return the number of available place for specified event 
+    """ Return the number of available place for a specified event 
 
     Args:
         client (flask.testing.FlaskClient): The flask client server object
         competition_index (int): The index of the competition selected for the test 
 
     Returns:
-        int: The number of remaining places
+        int: The number of remaining places for the selected competition
     """
     
     rv = client.post("/showSummary", data=dict(email='admin@irontemple.com'), follow_redirects=True)
@@ -70,3 +73,5 @@ def test_places_substraction(client, competition, club, places, message, time, c
 
     assert (number_before-places) == number_after
 
+if __name__ == '__main__':
+    unittest.main()
