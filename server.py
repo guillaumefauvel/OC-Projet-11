@@ -4,14 +4,21 @@ from datetime import datetime
 
 def create_app():
 
+    if __name__ == '__main__':
+        clubs_db = 'clubs.json' 
+        competitions_db = 'competitions.json'
+    else:
+        clubs_db = 'tests/test_database/clubs.json' 
+        competitions_db = 'tests/test_database/competitions.json'
+
     def loadClubs():
-        with open('clubs.json') as c:
+        with open(clubs_db) as c:
             listOfClubs = json.load(c)['clubs']
             return listOfClubs
 
 
     def loadCompetitions():
-        with open('competitions.json') as comps:
+        with open(competitions_db) as comps:
             listOfCompetitions = json.load(comps)['competitions']
             return listOfCompetitions
 

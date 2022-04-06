@@ -1,7 +1,5 @@
-from msilib import datasizemask
 import pytest
 import flask
-import urllib.request as urllib2
 
 from server import create_app
 
@@ -29,18 +27,26 @@ def _login_user(client, email, expected_url, template_ref, time):
     assert rv.data.decode().find(template_ref) != -1
 
 
-def test_login_user_success(client):
+@pytest.mark.parametrize('email, expected_url, template_ref, time',
+                         [("admin@irontemple.com", "showSummary", "Summary | GUDLFT Registration", "2022-10-22 13:30:00"),
+                          ("bademail@mail.com", "invalidemail", "Invalid Email", "2022-10-22 13:30:00")])
+def test_login_user(client, email, expected_url, template_ref, time):
+    """ Verify if the expected url is correct when we login
 
-    _login_user(client, "admin@irontemple.com", "showSummary", "Summary | GUDLFT Registration", "2022-10-22 13:30:00")
-
-
-def test_login_user_failure(client):
-
-    _login_user(client, "bademail@mail.com", "invalidemail", "Invalid Email", "2022-10-22 13:30:00")
+    Args:
+        client (flask.testing.FlaskClient): The flask client server object
+        email (str): The email used in order to login
+        url (str): The url we expect to get
+        template_ref (str): The template reference
+        time (str): The time we expect - (2022-10-22 13:30:00)
+    """
+    
+    _login_user(client, email, expected_url, template_ref, time)
 
 
 def test_summary_without_login(client):
-
+    """ Verify if the access of /showSummary is denied when we doesn't provide required info with a post """
+    
     rv = client.get("/showSummary", follow_redirects=True)
 
     assert rv.status_code == 405
@@ -55,23 +61,26 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
 
     url = "".join((flask.request.url).split("/")[3:])
 
-    print(url, expected_url)
-    assert url == expected_url
-    
+    assert url == expected_url    
     assert rv.status_code == 200
     assert rv.data.decode().find(expected_msg) != -1
 
 
-def test_without_credits(client):
+@pytest.mark.parametrize('selected_competition, selected_club, placesRequired, expected_msg, expected_url, time',
+                         [("Fall Classic", "Iron Temple", 5, "You don&#39;t have enough point", "bookFall%20ClassicIron%20Temple", "2022-10-22 13:30:00"),
+                          ("Fall Classic", "Iron Temple", 1, "Great-booking complete!", "purchasePlaces", "2022-10-22 13:30:00"),
+                          ("Fall Classic", "Iron Temple", 0, " ", "purchasePlaces", "2022-10-22 13:30:00")])
+def test_booking_reservation(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time):
+    """ Verify if the expected url is correct when we book a reservation
 
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 5, "You don&#39;t have enough point", "bookFall%20ClassicIron%20Temple", "2022-10-22 13:30:00")
-
-
-def test_with_credits(client):
-
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 1, "Great-booking complete!", "purchasePlaces", "2022-10-22 13:30:00")
-
-
-def test_without_credit_spending(client):
-
-    _competitions_assigment(client, "Fall Classic", "Iron Temple", 0, " ", "purchasePlaces", "2022-10-22 13:30:00")
+    Args:
+        client (flask.testing.FlaskClient): The flask client server object
+        selected_competition (str): The competition selected for the test
+        selected_club (str): The club wich we are logged with
+        placesRequired (int): The number of places we're trying to book
+        expected_msg (str): The message we're expected to see
+        expected_url (str): The url we expect to get
+        time (str): The time we expect - (2022-10-22 13:30:00)
+    """
+    
+    _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time)
