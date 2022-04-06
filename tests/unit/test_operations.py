@@ -12,7 +12,7 @@ def client():
 
 
 def _competitions_assigment(client, selected_competition, selected_club, placesRequired, message, time):
-    """ Check if the assignement is applied to the credit of the club """
+    """ Verify if the assignement is applied to the credit of the club """
     
     rv = client.post("/purchasePlaces", data=dict(competition=selected_competition,
                                                   club=selected_club,
@@ -23,15 +23,30 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
     assert rv.data.decode().find(message) != -1
 
 
-@pytest.mark.parametrize('competition, club, places, Message, time',
+@pytest.mark.parametrize('competition, club, places, message, time',
                          [('Fall Classic', 'Iron Temple', -1, "You need to specify a positive number", "2022-10-22 13:30:00"),
                           ('Fall Classic', 'Iron Temple', 50, "You cannot book more than 12 places", "2022-10-22 13:30:00"),
                           ('Fall Classic', 'Iron Temple', 6, "You don&#39;t have enough point", "2022-10-22 13:30:00"),
                           ('Fall Classic', 'Iron Temple', 1, "Points available: 3", "2022-10-22 13:30:00"),
                           ('Fall Classic', 'Iron Temple', 0, "Points available: 4", "2022-10-22 13:30:00")])
-def test_points_substraction(client, competition, club, places, Message, time):
+def test_points_substraction(client, competition, club, places, message, time):
+    """ We are verifying several scenarios about the points substraction : 
+    1. A reservation with a negative number
+    2. A reservation that exceeds 12 places for the same club
+    3. A reservations that exceed the credit of the connected user
+    4. A reservation with a valid number
+    5. A reservation of 0 places
     
-    _competitions_assigment(client, competition, club, places, Message, time)
+    Args:
+        client (flask.testing.FlaskClient): _description_
+        competition (str): _description_
+        club (str): _description_
+        places (str): _description_
+        message (str): _description_
+        time (str): _description_
+    """
+    
+    _competitions_assigment(client, competition, club, places, message, time)
 
 
 def _get_num_of_place(client, competition_index):
