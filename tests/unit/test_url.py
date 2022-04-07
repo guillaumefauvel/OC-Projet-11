@@ -61,7 +61,7 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
 
     url = "".join((flask.request.url).split("/")[3:])
 
-    assert url == expected_url    
+    assert url == expected_url
     assert rv.status_code == 200
     assert rv.data.decode().find(expected_msg) != -1
 
