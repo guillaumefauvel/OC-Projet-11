@@ -3,6 +3,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking for {{competition['name']}} || GUDLFT</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>Booking for {{competition['name']}} || GUDLFT</title>
+    <style>
+        body {
+            background-color: #d6d6d6;
+            color: rgb(0, 0, 0);
+            margin-left: 3%;}    
+    </style>
 </head>
 <body>
     <h2>{{competition['name']}}</h2>
@@ -11,11 +21,12 @@
             <h3>{{ messages[0] }}</h3>
         {% endif%}
     {%endwith%}
-    Places available: {{competition['numberOfPlaces']}}
+    Places available: {{competition['numberOfPlaces']}}/{{ competition['total_place'] }}
     <form action="/purchasePlaces" method="post">
         <input type="hidden" name="club" value="{{club['name']}}">
         <input type="hidden" name="competition" value="{{competition['name']}}">
-        <label for="places">How many places?</label><input type="number" name="places" id=""/>
+        <label for="places">How many places? &nbsp;&nbsp; </label>
+        <input type="number" name="places" id=""/>
         <button type="submit">Book</button>
     </form>
 </body>

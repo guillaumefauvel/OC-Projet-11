@@ -70,6 +70,8 @@ def create_app():
         except IndexError:
             return redirect('/invalidemail')
         
+        print(competitions[0])
+        
         return render_template('welcome.html',
                                club=club,
                                competitions=competitions,
@@ -168,7 +170,6 @@ def create_app():
             ref_list = []
             
             for comp in competitions:
-                print(total_points_events)
                 for associated_club in list(comp['bookedPerClub'].keys()):
                     if associated_club == club_name:
                         ref_list.append(comp['bookedPerClub'][club_name])
@@ -184,13 +185,15 @@ def create_app():
                 "points": club['points'],
                 "ref_list": ref_list
             }
-                
+            
+        clubs_total_points = sum([int(table[v]['points']) for v in table])
+        
         return render_template('display_detailed_board.html',
                                competitions=competitions,
                                table=table,
-                               total_points_events=total_points_events)
+                               total_points_events=total_points_events,
+                               clubs_total_points=clubs_total_points)
     
-
     if __name__ == '__main__':
         app.run(debug=True)
 

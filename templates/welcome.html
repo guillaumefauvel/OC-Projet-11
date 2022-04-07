@@ -3,34 +3,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Summary | GUDLFT Registration</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #d6d6d6;
+            color: rgb(0, 0, 0);
+            margin-left: 3%;
+        }
+        .progress {
+            width: 50%;
+        }
+    </style>
 </head>
 <body>
-        <h2>Welcome, {{club['email']}} </h2><a href="{{url_for('logout')}}">Logout</a>
+    <h2>Welcome, {{club['email']}} </h2>
+
+    <a type="button" class="btn btn-danger btn-sm" href="{{url_for('logout')}}">Logout</a>
+    <a type="button" class="btn btn-success btn-sm" href="{{url_for('detailed_board')}}">Display Board</a>
 
     {% with messages = get_flashed_messages()%}
     {% if messages %}
         <ul>
-       {% for message in messages %}
+        {% for message in messages %}
             <li>{{message}}</li>
         {% endfor %}
-       </ul>
+        </ul>
     {% endif%}
+    <br></br>
     Points available: {{club['points']}}
     <h3>Competitions:</h3>
     <ul>
-        {% for comp in competitions%}
+        {% for comp in competitions %}
         <li>
             {{comp['name']}}<br />
             Date: {{comp['date']}}</br>
-            Number of Places: {{comp['numberOfPlaces']}}
             {%if comp['numberOfPlaces']|int > 0 and comp['date'] > time %}
-                <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+                Places available: {{comp['numberOfPlaces']}}/{{ comp['total_place'] }} &nbsp;&nbsp;
+                    <a type="button" class="btn btn-info btn-sm" href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+                <br></br>
+                <div class="progress"  style="height: 4px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ ((comp['total_place']|int - comp['numberOfPlaces']|int) / comp['total_place']|int) *100 }}%"></div>                
+                </div>
             {%endif%}
+
         </li>
         <hr />
         {% endfor %}
     </ul>
     {%endwith%}
-
 </body>
 </html>

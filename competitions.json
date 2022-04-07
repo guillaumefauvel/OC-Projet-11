@@ -2,23 +2,26 @@
     {
         "name": "Garigue Moutain",
         "date": "2022-12-15 14:30:00",
-        "numberOfPlaces": 9,
+        "numberOfPlaces": 7,
+        "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 5
+            "Iron Temple": 7
         }
     },
     {
         "name": "Fall Classic",
         "date": "2022-10-22 13:30:00",
-        "numberOfPlaces": 12,
+        "numberOfPlaces": 11,
+        "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 1
+            "Iron Temple": 2
         }
     },
     {
         "name": "Lor Beach",
         "date": "2020-12-15 14:30:00",
         "numberOfPlaces": "14",
+        "total_place": 30,
         "bookedPerClub": {
             "Iron Temple": 4
         }
@@ -27,6 +30,7 @@
         "name": "Spring Festival",
         "date": "2020-03-27 10:00:00",
         "numberOfPlaces": "25",
+        "total_place": 30,
         "bookedPerClub": {
             "Iron Temple": 5,
             "Simply Lift": 4,
