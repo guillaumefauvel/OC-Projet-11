@@ -152,6 +152,45 @@ def create_app():
     def logout():
         return redirect(url_for('index'))
 
+    @app.route('/board')
+    def board():
+        return render_template('display_board.html', clubs=clubs, competitions=competitions)
+    
+    @app.route('/detailed-board')
+    def detailed_board():
+      
+        table = {}
+        total_points_events = {}
+
+        for club in clubs:
+            club_name = club['name']
+
+            ref_list = []
+            
+            for comp in competitions:
+                print(total_points_events)
+                for associated_club in list(comp['bookedPerClub'].keys()):
+                    if associated_club == club_name:
+                        ref_list.append(comp['bookedPerClub'][club_name])
+                        try: 
+                            old_value = total_points_events[comp['name']]
+                            total_points_events[comp['name']] = old_value + comp['bookedPerClub'][club_name]
+                        except KeyError:
+                            total_points_events[comp['name']] = comp['bookedPerClub'][club_name]
+                    elif club_name not in list(comp['bookedPerClub'].keys()):
+                        ref_list.append(0)
+
+            table[f'{club_name}'] = {
+                "points": club['points'],
+                "ref_list": ref_list
+            }
+                
+        return render_template('display_detailed_board.html',
+                               competitions=competitions,
+                               table=table,
+                               total_points_events=total_points_events)
+    
+
     if __name__ == '__main__':
         app.run(debug=True)
 
