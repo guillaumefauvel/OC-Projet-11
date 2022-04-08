@@ -48,8 +48,10 @@ def test_summary_without_login(client):
     """ Verify if the access of /showSummary is denied when we doesn't provide required info with a post """
     
     rv = client.get("/showSummary", follow_redirects=True)
-
-    assert rv.status_code == 405
+    url = "".join((flask.request.url).split("/")[3:])
+    
+    assert url == "forbidden"
+    assert rv.status_code == 200
 
 
 def _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time):

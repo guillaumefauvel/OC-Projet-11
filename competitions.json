@@ -1,8 +1,19 @@
 {"competitions": [
     {
+        "name": "Summer Festival",
+        "date": "2023-04-27 10:00:00",
+        "numberOfPlaces": 19,
+        "total_place": 30,
+        "bookedPerClub": {
+            "Iron Temple": 1,
+            "Simply Lift": 3,
+            "She Lifts": 7
+        }
+    },
+    {
         "name": "Garigue Moutain",
         "date": "2022-12-15 14:30:00",
-        "numberOfPlaces": 7,
+        "numberOfPlaces": 23,
         "total_place": 30,
         "bookedPerClub": {
             "Iron Temple": 7
@@ -11,25 +22,25 @@
     {
         "name": "Fall Classic",
         "date": "2022-10-22 13:30:00",
-        "numberOfPlaces": 11,
+        "numberOfPlaces": 25,
         "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 2
+            "Iron Temple": 5
         }
     },
     {
         "name": "Lor Beach",
         "date": "2020-12-15 14:30:00",
-        "numberOfPlaces": "14",
+        "numberOfPlaces": "22",
         "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 4
+            "Iron Temple": 8
         }
     },
     {
         "name": "Spring Festival",
         "date": "2020-03-27 10:00:00",
-        "numberOfPlaces": "25",
+        "numberOfPlaces": "17",
         "total_place": 30,
         "bookedPerClub": {
             "Iron Temple": 5,

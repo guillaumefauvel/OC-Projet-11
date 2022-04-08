@@ -11,14 +11,20 @@
         body {
             background-color: #d6d6d6;
             color: rgb(0, 0, 0);
-            margin-left: 3%;}    
+            display:block;
+            width:30%;
+            margin: auto;
+            margin-top: 7%;
+        }
+
     </style>
 </head>
 <body>
     <h2>{{competition['name']}}</h2>
     {% with messages = get_flashed_messages()%}
         {% if messages %}
-            <h3>{{ messages[0] }}</h3>
+            <span class="badge badge-warning">{{ messages[0] }}</span>
+            <br></br>
         {% endif%}
     {%endwith%}
     Places available: {{competition['numberOfPlaces']}}/{{ competition['total_place'] }}
@@ -26,8 +32,9 @@
         <input type="hidden" name="club" value="{{club['name']}}">
         <input type="hidden" name="competition" value="{{competition['name']}}">
         <label for="places">How many places? &nbsp;&nbsp; </label>
-        <input type="number" name="places" id=""/>
-        <button type="submit">Book</button>
+        <input type="number" name="places" id=""/> &nbsp;
+        <button class="btn btn-info btn-sm" type="submit">Book</button>
     </form>
 </body>
+
 </html>

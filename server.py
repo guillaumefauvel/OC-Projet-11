@@ -59,8 +59,8 @@ def create_app():
     def index():
         return render_template('index.html')
 
-
-    @app.route('/showSummary',methods=['POST'])
+    @app.route('/showSummary', methods=['POST'])
+    @app.route('/showSummary')
     def showSummary():
         """ 
         Log the user if his email is registered in the database, if not abort with a 404 status code. 
@@ -69,9 +69,9 @@ def create_app():
             club = [club for club in clubs if club['email'] == request.form['email']][0]
         except IndexError:
             return redirect('/invalidemail')
-        
-        print(competitions[0])
-        
+        except KeyError:
+            return redirect('/forbidden')
+                
         return render_template('welcome.html',
                                club=club,
                                competitions=competitions,
@@ -84,6 +84,13 @@ def create_app():
         Inform the user that his email his not registered.
         """
         return render_template('wrongemail.html')
+
+    @app.route('/forbidden')
+    def forbidden():
+        """ 
+        Inform the user that his email his not registered.
+        """
+        return render_template('not_connected.html')
 
 
     @app.route('/book/<competition>/<club>')
@@ -111,7 +118,10 @@ def create_app():
         competition = [c for c in competitions if c['name'] == selected_competition][0]
         club = [c for c in clubs if c['name'] == selected_club][0]
 
-        placesRequired = int(request.form['places'])
+        try:
+            placesRequired = int(request.form['places'])
+        except ValueError:
+            return render_template('welcome.html', club=club, competitions=competitions, time=actual_time)
 
         if placesRequired > 12:
             flash('You cannot book more than 12 places')
@@ -183,7 +193,7 @@ def create_app():
 
             table[f'{club_name}'] = {
                 "points": club['points'],
-                "ref_list": ref_list
+                "ref_list": ref_list,
             }
             
         clubs_total_points = sum([int(table[v]['points']) for v in table])

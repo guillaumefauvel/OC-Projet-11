@@ -29,6 +29,7 @@
                     <th>{{ club }}</th>
                 {% endfor %}
                 <th>Total</th>
+                <th>Available</th>
             </tr>
 
             <tr>
@@ -36,7 +37,7 @@
                 {% for club in table %}
                     <td>{{ table[club]['points'] }}</td>
                 {% endfor %}
-                <td>{{ clubs_total_points }}</td>
+                <td>{{ clubs_total_points }}
             </tr>
         </thead>
 
@@ -48,9 +49,9 @@
                     <td>{{ table[club]['ref_list'][outer_loop.index0]}}</td>
                 {% endfor %}
                 <td>{{ total_points_events[comp['name']] }}</td>
+                <td>{{ comp['numberOfPlaces']|int }}</td>
             </tr>
         {% endfor %}
     </table>
-
 </body>
 </html>

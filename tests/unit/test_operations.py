@@ -62,13 +62,14 @@ def _get_num_of_place(client, competition_index):
     
     rv = client.post("/showSummary", data=dict(email='admin@irontemple.com'), follow_redirects=True)
     num_of_place = [int(x) for x in rv.data.decode().split() if x.isdigit()][competition_index]
+    
     return num_of_place
 
 
 
 @pytest.mark.parametrize('competition, club, places, message, time, competition_index',
-                         [("Fall Classic", 'Iron Temple', 1, "Points available: 3", "2022-10-22 13:30:00", 2),
-                          ('Garigue Moutain', 'Iron Temple', 2, "Points available: 2", "2022-10-22 13:30:00", 1)])
+                         [("Fall Classic", 'Iron Temple', 1, "Places available: 11", "2022-10-22 13:30:00", 2),
+                          ('Garigue Moutain', 'Iron Temple', 2, "Places available: 9", "2022-10-22 13:30:00", 1)])
 def test_places_substraction(client, competition, club, places, message, time, competition_index):
     """ Verify if the places substraction is working correctly
 

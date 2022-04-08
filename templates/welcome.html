@@ -40,14 +40,13 @@
             {{comp['name']}}<br />
             Date: {{comp['date']}}</br>
             {%if comp['numberOfPlaces']|int > 0 and comp['date'] > time %}
-                Places available: {{comp['numberOfPlaces']}}/{{ comp['total_place'] }} &nbsp;&nbsp;
+                Places available: {{comp['numberOfPlaces']}} /{{ comp['total_place'] }} &nbsp;&nbsp;
                     <a type="button" class="btn btn-info btn-sm" href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
                 <br></br>
                 <div class="progress"  style="height: 4px;">
                     <div class="progress-bar" role="progressbar" style="width: {{ ((comp['total_place']|int - comp['numberOfPlaces']|int) / comp['total_place']|int) *100 }}%"></div>                
                 </div>
             {%endif%}
-
         </li>
         <hr />
         {% endfor %}
