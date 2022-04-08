@@ -4,6 +4,8 @@ from re import L
 from flask import Flask, render_template, request, redirect, flash, url_for, abort
 from datetime import datetime
 
+from data_manager import loadCompetitions, loadClubs, saveClubs, saveCompetitions
+
 def create_app():
     
     test_mode = False
@@ -17,47 +19,23 @@ def create_app():
         competitions_db = 'tests/test_database/competitions.json'
 
 
-    def loadClubs():
-        with open(clubs_db) as c:
-            listOfClubs = json.load(c)['clubs']
-            return listOfClubs
-
-
-    def loadCompetitions():
-        with open(competitions_db) as comps:
-            list_of_competition = json.load(comps)['competitions']
-            sorted_list_of_competition = sorted(list_of_competition, key=lambda x: x['date'], reverse=True)
-            return sorted_list_of_competition
-
-
-    def saveClubs(clubs):
-        with open(clubs_db, 'w') as c:
-            jstr = json.dumps(clubs, indent=4)
-            c.write('{'f'"clubs": {jstr}''}')
-
-
-    def saveCompetitions(competitions):
-        with open(competitions_db, 'w') as c:
-            jstr = json.dumps(competitions, indent=4)
-            c.write('{'f'"competitions": {jstr}''}')
-
-
     app = Flask(__name__)
     app.secret_key = 'something_special'
     
-    competitions = loadCompetitions()
-    clubs = loadClubs()
+    competitions = loadCompetitions(competitions_db)
+    clubs = loadClubs(clubs_db)
 
     def data_update(clubs, competitions):
         
         if not test_mode:
-            saveClubs(clubs)
-            saveCompetitions(competitions)
+            saveClubs(clubs, clubs_db)
+            saveCompetitions(competitions, competitions_db)
         
 
     @app.route('/')
     def index():
         return render_template('index.html')
+
 
     @app.route('/showSummary', methods=['POST'])
     @app.route('/showSummary')
