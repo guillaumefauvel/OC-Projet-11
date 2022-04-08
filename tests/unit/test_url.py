@@ -86,3 +86,15 @@ def test_booking_reservation(client, selected_competition, selected_club, places
     """
 
     _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time)
+
+
+def test_display_board_url(client):
+    """ Verify if the access of /detailed-board if we are not logged in """
+    
+    rv = client.get("/detailed-board", follow_redirects=True)
+    url = "".join((flask.request.url).split("/")[3:])
+    
+    assert rv.data.decode().find('GUDLFT - Detailed Board') != -1
+    assert url == "detailed-board"
+    assert rv.status_code == 200
+    

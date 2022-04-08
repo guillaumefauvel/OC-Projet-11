@@ -12,7 +12,16 @@ def client():
 
 
 def _competitions_assigment(client, selected_competition, selected_club, placesRequired, message, time):
-    """ Verify if the assignement is applied to the credit of the club """
+    """ Verify if the assignement is applied to the credit of the club 
+    
+        Args:
+        client (flask.testing.FlaskClient): _description_
+        competition (str): _description_
+        club (str): _description_
+        places (str): _description_
+        message (str): _description_
+        time (str): _description_
+    """
     
     rv = client.post("/purchasePlaces", data=dict(competition=selected_competition,
                                                   club=selected_club,
