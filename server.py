@@ -1,7 +1,6 @@
-import json
 from pprint import pprint
 from re import L
-from flask import Flask, render_template, request, redirect, flash, url_for, abort
+from flask import Flask, render_template, request, redirect, flash, url_for
 from datetime import datetime
 
 from data_manager import loadCompetitions, loadClubs, saveClubs, saveCompetitions
@@ -11,8 +10,8 @@ def create_app():
     test_mode = False
     
     if __name__ == '__main__':
-        clubs_db = 'clubs.json' 
-        competitions_db = 'competitions.json'
+        clubs_db = 'database/clubs.json' 
+        competitions_db = 'database/competitions.json'
     else:
         test_mode = True
         clubs_db = 'tests/test_database/clubs.json' 
@@ -26,7 +25,7 @@ def create_app():
     clubs = loadClubs(clubs_db)
 
     def data_update(clubs, competitions):
-        
+
         if not test_mode:
             saveClubs(clubs, clubs_db)
             saveCompetitions(competitions, competitions_db)
@@ -49,7 +48,7 @@ def create_app():
             return redirect('/invalidemail')
         except KeyError:
             return redirect('/forbidden')
-                
+  
         return render_template('welcome.html',
                                club=club,
                                competitions=competitions,
@@ -63,6 +62,7 @@ def create_app():
         """
         return render_template('wrongemail.html')
 
+
     @app.route('/forbidden')
     def forbidden():
         """ 
@@ -73,17 +73,21 @@ def create_app():
 
     @app.route('/book/<competition>/<club>')
     def book(competition,club):
-        foundClub = [c for c in clubs if c['name'] == club][0]
-        foundCompetition = [c for c in competitions if c['name'] == competition][0]
+        
         actual_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        try:        
+            foundClub = [c for c in clubs if c['name'] == club][0]
+            foundCompetition = [c for c in competitions if c['name'] == competition][0]
+        except IndexError:
+            flash("Something went wrong-please try again")
+            return render_template('welcome.html', club=club, competitions=competitions, time=actual_time)
 
         if foundCompetition['date'] < actual_time:
             return render_template('booking_not_allowed.html', club=foundClub, competition=foundCompetition)
         elif foundClub and foundCompetition:
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
-        else:
-            flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions, time=actual_time)
+            
 
 
     @app.route('/purchasePlaces',methods=['POST'])
@@ -96,6 +100,10 @@ def create_app():
         competition = [c for c in competitions if c['name'] == selected_competition][0]
         club = [c for c in clubs if c['name'] == selected_club][0]
 
+        if competition['date'] < actual_time:
+            flash("You cannot book from a closed competition")
+            return render_template('welcome.html', club=club, competitions=competitions, time=actual_time)
+        
         try:
             placesRequired = int(request.form['places'])
         except ValueError:
@@ -142,13 +150,10 @@ def create_app():
     def logout():
         return redirect(url_for('index'))
 
-    @app.route('/board')
-    def board():
-        return render_template('display_board.html', clubs=clubs, competitions=competitions)
     
     @app.route('/detailed-board')
     def detailed_board():
-      
+
         table = {}
         total_points_events = {}
 

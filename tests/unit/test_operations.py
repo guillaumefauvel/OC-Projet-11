@@ -64,7 +64,6 @@ def _get_num_of_place(client, competition_index):
     Args:
         client (flask.testing.FlaskClient): The flask client server object
         competition_index (int): The index of the competition selected for the test 
-
     Returns:
         int: The number of remaining places for the selected competition
     """
@@ -91,7 +90,7 @@ def test_places_substraction(client, competition, club, places, message, time, c
         time (str): The time we expect - (2022-10-22 13:30:00)
         competition_index (int): used by _get_num_of_place() in order to select a competition by his index
     """
-    
+
     number_before = _get_num_of_place(client, competition_index)
     _competitions_assigment(client, competition, club, places, message, time)
     number_after = _get_num_of_place(client, competition_index)

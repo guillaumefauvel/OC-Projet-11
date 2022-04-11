@@ -1,6 +1,5 @@
 import pytest
 import flask
-
 from server import create_app
 
 @pytest.fixture
@@ -25,7 +24,7 @@ def _login_user(client, email, expected_url, template_ref, time):
     assert url == expected_url
     assert rv.status_code == 200
     assert rv.data.decode().find(template_ref) != -1
-
+    
 
 @pytest.mark.parametrize('email, expected_url, template_ref, time',
                          [("admin@irontemple.com", "showSummary", "Summary | GUDLFT Registration", "2022-10-22 13:30:00"),
@@ -62,7 +61,7 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
                                                   time=time), follow_redirects=True)
 
     url = "".join((flask.request.url).split("/")[3:])
-
+    print(rv.data.decode())
     assert url == expected_url
     assert rv.status_code == 200
     assert rv.data.decode().find(expected_msg) != -1
@@ -71,7 +70,8 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
 @pytest.mark.parametrize('selected_competition, selected_club, placesRequired, expected_msg, expected_url, time',
                          [("Fall Classic", "Iron Temple", 5, "You don&#39;t have enough point", "bookFall%20ClassicIron%20Temple", "2022-10-22 13:30:00"),
                           ("Fall Classic", "Iron Temple", 1, "Great-booking complete!", "purchasePlaces", "2022-10-22 13:30:00"),
-                          ("Fall Classic", "Iron Temple", 0, " ", "purchasePlaces", "2022-10-22 13:30:00")])
+                          ("Fall Classic", "Iron Temple", 0, " ", "purchasePlaces", "2022-10-22 13:30:00"),
+                          ("Fall Classic", "Iron Temple", "", " ", "purchasePlaces", "2022-10-22 13:30:00")])
 def test_booking_reservation(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time):
     """ Verify if the expected url is correct when we book a reservation
 
@@ -97,4 +97,39 @@ def test_display_board_url(client):
     assert rv.data.decode().find('GUDLFT - Detailed Board') != -1
     assert url == "detailed-board"
     assert rv.status_code == 200
+
+
+def test_logout(client):
+    """ Verify if we are corectly logged out """
+       
+    rv = client.get("/logout", follow_redirects=True)
+
+    url = "".join((flask.request.url).split("/")[3:])
+
+    assert url == ""
+    assert rv.data.decode().find('GUDLFT Registration') != -1
+    assert rv.status_code == 200
+
+
+def test_booking_old_competitions(client):
     
+    rv = client.post("/purchasePlaces", data=dict(competition="Lor Beach",
+                                                  club="Iron Temple",
+                                                  places="1",
+                                                  time="2022-10-22 13:30:00"), follow_redirects=True)
+
+    url = "".join((flask.request.url).split("/")[3:])
+
+    assert url == "purchasePlaces"
+    assert rv.status_code == 200
+
+
+@pytest.mark.parametrize('url, expected_msg',
+                         [("book/Lor%20Beach/Iron%20Temple", "This competitons is close"),
+                          ("book/bad%20Beach/bad%20Temple", "Something went wrong-please try again")])
+def test_purchase_page_with_invalid_competitions(client, url, expected_msg):
+ 
+    rv = client.get(url, follow_redirects=True)
+
+    assert rv.status_code == 200
+    assert rv.data.decode().find(expected_msg) != -1

@@ -10,7 +10,6 @@ def loadClubs(clubs_db):
     
     with open(clubs_db) as c:
         listOfClubs = json.load(c)['clubs']
-        print(type(listOfClubs))
         return listOfClubs
 
 
