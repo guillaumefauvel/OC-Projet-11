@@ -3,7 +3,7 @@ from re import L
 from flask import Flask, render_template, request, redirect, flash, url_for
 from datetime import datetime
 
-from data_manager import loadCompetitions, loadClubs, saveClubs, saveCompetitions
+from helpers.data_manager import loadCompetitions, loadClubs, saveClubs, saveCompetitions
 
 def create_app():
     

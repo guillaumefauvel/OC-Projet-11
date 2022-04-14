@@ -2,7 +2,7 @@ from pprint import pprint
 import pytest
 import re
 
-from data_manager import loadClubs, loadCompetitions, saveClubs, saveCompetitions
+from helpers.data_manager import loadClubs, loadCompetitions, saveClubs, saveCompetitions
 from server import create_app
 
 @pytest.fixture
