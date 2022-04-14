@@ -2,10 +2,10 @@
     {
         "name": "Summer Festival",
         "date": "2023-04-27 10:00:00",
-        "numberOfPlaces": 10,
+        "numberOfPlaces": 9,
         "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 10,
+            "Iron Temple": 11,
             "Simply Lift": 3,
             "She Lifts": 7
         }
@@ -22,10 +22,10 @@
     {
         "name": "Fall Classic",
         "date": "2022-10-22 13:30:00",
-        "numberOfPlaces": 24,
+        "numberOfPlaces": 23,
         "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 6
+            "Iron Temple": 7
         }
     },
     {

@@ -61,7 +61,7 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
                                                   time=time), follow_redirects=True)
 
     url = "".join((flask.request.url).split("/")[3:])
-    print(rv.data.decode())
+
     assert url == expected_url
     assert rv.status_code == 200
     assert rv.data.decode().find(expected_msg) != -1
@@ -112,6 +112,7 @@ def test_logout(client):
 
 
 def test_booking_old_competitions(client):
+    """ Verify if booking an old competitions is blocked """
     
     rv = client.post("/purchasePlaces", data=dict(competition="Lor Beach",
                                                   club="Iron Temple",
@@ -124,11 +125,13 @@ def test_booking_old_competitions(client):
     assert rv.status_code == 200
 
 
+
 @pytest.mark.parametrize('url, expected_msg',
                          [("book/Lor%20Beach/Iron%20Temple", "This competitons is close"),
                           ("book/bad%20Beach/bad%20Temple", "Something went wrong-please try again")])
 def test_purchase_page_with_invalid_competitions(client, url, expected_msg):
- 
+    """ Verify if booking an old or an invalid competitions is filtered """
+
     rv = client.get(url, follow_redirects=True)
 
     assert rv.status_code == 200
