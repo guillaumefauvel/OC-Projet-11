@@ -68,7 +68,7 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
 
 
 @pytest.mark.parametrize('selected_competition, selected_club, placesRequired, expected_msg, expected_url, time',
-                         [("Fall Classic", "Iron Temple", 5, "You don&#39;t have enough point", "bookFall%20ClassicIron%20Temple", "2022-10-22 13:30:00"),
+                         [("Fall Classic", "Iron Temple", 13, "You cannot book more than 12 places", "bookFall%20ClassicIron%20Temple", "2022-10-22 13:30:00"),
                           ("Fall Classic", "Iron Temple", 1, "Great-booking complete!", "purchasePlaces", "2022-10-22 13:30:00"),
                           ("Fall Classic", "Iron Temple", 0, " ", "purchasePlaces", "2022-10-22 13:30:00"),
                           ("Fall Classic", "Iron Temple", "", " ", "purchasePlaces", "2022-10-22 13:30:00")])

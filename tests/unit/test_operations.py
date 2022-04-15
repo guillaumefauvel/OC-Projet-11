@@ -1,4 +1,5 @@
 import unittest
+import flask
 import pytest
 from server import create_app
 
@@ -35,9 +36,8 @@ def _competitions_assigment(client, selected_competition, selected_club, placesR
 @pytest.mark.parametrize('competition, club, places, message, time',
                          [('Fall Classic', 'Iron Temple', -1, "You need to specify a positive number", "2022-10-22 13:30:00"),
                           ('Fall Classic', 'Iron Temple', 50, "You cannot book more than 12 places", "2022-10-22 13:30:00"),
-                          ('Fall Classic', 'Iron Temple', 6, "You don&#39;t have enough point", "2022-10-22 13:30:00"),
-                          ('Fall Classic', 'Iron Temple', 1, "Points available: 3", "2022-10-22 13:30:00"),
-                          ('Fall Classic', 'Iron Temple', 0, "Points available: 4", "2022-10-22 13:30:00")])
+                          ('Fall Classic', 'Iron Temple', 1, "Points available: 14", "2022-10-22 13:30:00"),
+                          ('Fall Classic', 'Iron Temple', 0, "Points available: 15", "2022-10-22 13:30:00")])
 def test_points_substraction(client, competition, club, places, message, time):
     """ We are verifying several scenarios about the points substraction : 
     1. A reservation with a negative number
@@ -47,7 +47,7 @@ def test_points_substraction(client, competition, club, places, message, time):
     5. A reservation of 0 places
     
     Args:
-        client (flask.testing.FlaskClient): _description_
+        client (flask.testing.FlaskClient): The flask client server object
         competition (str): _description_
         club (str): _description_
         places (str): _description_
@@ -56,6 +56,26 @@ def test_points_substraction(client, competition, club, places, message, time):
     """
     
     _competitions_assigment(client, competition, club, places, message, time)
+
+
+def test_event_quota(client):
+    """ Verify if the credit limit of 12 places per event is respected
+    Args:
+        client (flask.testing.FlaskClient): The flask client server object
+    """
+    
+    _competitions_assigment(client, 'Fall Classic', 'Iron Temple', 7, "Points available: 8", '2022-10-22 13:30:00')
+    _competitions_assigment(client, 'Fall Classic', 'Iron Temple', 6, 'You have reach your max reservation credit for this event', '2022-10-22 13:30:00')
+
+
+def test_without_credit(client):
+    """ Verify if the credit limit based on the credit of the user
+    Args:
+        client (flask.testing.FlaskClient): The flask client server object
+    """
+    
+    _competitions_assigment(client, 'Fall Classic', 'Iron Temple', 11, "Points available: 4", '2022-10-22 13:30:00')
+    _competitions_assigment(client, 'Garigue Moutain', 'Iron Temple', 5, "You don&#39;t have enough point", '2022-10-22 13:30:00')
 
 
 def _get_num_of_place(client, competition_index):
@@ -72,7 +92,6 @@ def _get_num_of_place(client, competition_index):
     num_of_place = [int(x) for x in rv.data.decode().split() if x.isdigit()][competition_index]
     
     return num_of_place
-
 
 
 @pytest.mark.parametrize('competition, club, places, message, time, competition_index',
@@ -96,6 +115,7 @@ def test_places_substraction(client, competition, club, places, message, time, c
     number_after = _get_num_of_place(client, competition_index)
 
     assert (number_before-places) == number_after
+
 
 if __name__ == '__main__':
     unittest.main()

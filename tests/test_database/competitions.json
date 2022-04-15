@@ -4,9 +4,7 @@
         "date": "2022-12-15 14:30:00",
         "total_place": "30",
         "numberOfPlaces": 11,
-        "bookedPerClub": {
-            "Iron Temple": 3
-        }
+        "bookedPerClub": {}
     },
     {
         "name": "Fall Classic",

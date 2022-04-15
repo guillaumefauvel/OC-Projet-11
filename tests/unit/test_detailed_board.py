@@ -88,7 +88,7 @@ def test_clean_data():
     
     global clubs
     global competitions
-    
+
     clubs = clubs[:-1]
     competitions = competitions[:-1]
     

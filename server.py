@@ -118,6 +118,7 @@ def create_app():
             return redirect(f'/book/{selected_competition}/{selected_club}')
 
         elif int(club['points'])-placesRequired >= 0:
+            
             try:
                 if competition['bookedPerClub'][club['name']] + placesRequired > 12:
                     flash('You have reach your max reservation credit for this event')

@@ -2,10 +2,10 @@
     {
         "name": "Summer Festival",
         "date": "2023-04-27 10:00:00",
-        "numberOfPlaces": 9,
+        "numberOfPlaces": 8,
         "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 11,
+            "Iron Temple": 12,
             "Simply Lift": 3,
             "She Lifts": 7
         }
