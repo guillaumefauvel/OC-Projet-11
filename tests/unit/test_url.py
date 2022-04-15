@@ -5,7 +5,7 @@ from server import create_app
 @pytest.fixture
 def client():
 
-    app = create_app()
+    app = create_app(mode='UnitTest')
     with app.test_client() as client:
         yield client
 
@@ -136,3 +136,5 @@ def test_purchase_page_with_invalid_competitions(client, url, expected_msg):
 
     assert rv.status_code == 200
     assert rv.data.decode().find(expected_msg) != -1
+
+

@@ -1,30 +1,46 @@
-# # from selenium import webdriver
-# # from webdriver_manager.chrome import ChromeDriverManager
-# # import unittest
+from requests import request
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+import unittest
 
-# from helpers.data_manager import loadClubs, loadCompetitions
 
-# # class FunctionnalTests(unittest.TestCase):
+class FunctionnalTests(unittest.TestCase):
     
-# #     def setUpClass(cls):
+    @classmethod
+    def setUpClass(cls):
+        cls.driver = webdriver.Chrome(ChromeDriverManager().install())
+        cls.driver.implicitly_wait(2)
+        cls.driver.maximize_window()
     
-# #         cls.driver = webdriver.Chrome(ChromeDriverManager().install())
-# #         cls.driver.get('http://127.0.0.1:5000')
-# #         cls.driver.implicitly_wait(2)
+    def good_connection(self):
+        self.driver.get('http://127.0.0.1:5000')
+        self.driver.find_element_by_name('email').send_keys('admin@irontemple.com')
+        self.driver.find_element_by_class_name('btn-success').click()
         
-# #         CLUBS_DB_REF = 'tests/test_database/clubs.json' 
-# #         COMPETITIONS_DB_REF = 'tests/test_database/competitions.json'
+    def test_search_connection_with_booking(self):
+        self.good_connection()
+        self.driver.find_element_by_class_name('btn-info').click()
+        self.driver.find_element_by_name('places').send_keys('2')
+        self.driver.find_element_by_class_name('btn-info').click()
+        assert self.driver.current_url == 'http://127.0.0.1:5000/purchasePlaces'
 
-# #         clubs = loadClubs(CLUBS_DB_REF)
-# #         competitions = loadCompetitions(COMPETITIONS_DB_REF)
 
-# # launcher = FunctionnalTests()
+    def test_search_connection_with_display_board(self):
+        self.good_connection()
+        self.driver.find_element_by_class_name('btn-success').click()
+        assert self.driver.current_url == 'http://127.0.0.1:5000/detailed-board'
 
-# from .helpers.data_manager import loadClubs, loadCompetitions
+    def test_search_connection_and_logout(self):
+        self.good_connection()
+        self.driver.find_element_by_class_name('btn-danger').click()
+        assert self.driver.current_url == 'http://127.0.0.1:5000/'
 
-# from . import helpers
+    @classmethod
+    def tearDownClass(cls):
+        cls.driver.close()
+        cls.driver.quit()
+        print('----> Test Completed')
 
-# test = helpers.data_manager.loadClubs('tests/test_database/clubs.json')
 
-# print(test)
-
+if __name__ == '__main__':
+    unittest.main()

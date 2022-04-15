@@ -5,15 +5,12 @@ from datetime import datetime
 
 from helpers.data_manager import loadCompetitions, loadClubs, saveClubs, saveCompetitions
 
-def create_app():
-    
-    test_mode = False
-    
-    if __name__ == '__main__':
+def create_app(mode):
+        
+    if mode == 'Production':
         clubs_db = 'database/clubs.json' 
         competitions_db = 'database/competitions.json'
-    else:
-        test_mode = True
+    elif mode == 'UnitTest':
         clubs_db = 'tests/test_database/clubs.json' 
         competitions_db = 'tests/test_database/competitions.json'
 
@@ -26,11 +23,10 @@ def create_app():
 
     def data_update(clubs, competitions):
 
-        if not test_mode:
+        if mode == 'Production':
             saveClubs(clubs, clubs_db)
             saveCompetitions(competitions, competitions_db)
         
-
     @app.route('/')
     def index():
         return render_template('index.html')
@@ -88,7 +84,6 @@ def create_app():
         elif foundClub and foundCompetition:
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
             
-
 
     @app.route('/purchasePlaces',methods=['POST'])
     def purchasePlaces():
@@ -158,6 +153,8 @@ def create_app():
         table = {}
         total_points_events = {}
 
+        actual_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         for club in clubs:
             club_name = club['name']
 
@@ -175,13 +172,16 @@ def create_app():
                     elif club_name not in list(comp['bookedPerClub'].keys()):
                         ref_list.append(0)
 
+                if comp['date'] < actual_time:
+                    comp['numberOfPlaces'] = 0
+                
             table[f'{club_name}'] = {
                 "points": club['points'],
                 "ref_list": ref_list,
             }
             
         clubs_total_points = sum([int(table[v]['points']) for v in table])
-        
+                
         return render_template('display_detailed_board.html',
                                competitions=competitions,
                                table=table,
@@ -193,4 +193,5 @@ def create_app():
 
     return app
 
-create_app()
+
+create_app(mode='UnitTest')

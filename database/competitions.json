@@ -13,19 +13,19 @@
     {
         "name": "Garigue Moutain",
         "date": "2022-12-15 14:30:00",
-        "numberOfPlaces": 23,
+        "numberOfPlaces": 21,
         "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 7
+            "Iron Temple": 9
         }
     },
     {
         "name": "Fall Classic",
         "date": "2022-10-22 13:30:00",
-        "numberOfPlaces": 23,
+        "numberOfPlaces": 20,
         "total_place": 30,
         "bookedPerClub": {
-            "Iron Temple": 7
+            "Iron Temple": 10
         }
     },
     {

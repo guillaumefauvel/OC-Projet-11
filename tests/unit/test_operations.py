@@ -1,12 +1,11 @@
 import unittest
-import flask
 import pytest
 from server import create_app
 
 @pytest.fixture
 def client():
 
-    app = create_app()
+    app = create_app(mode='UnitTest')
 
     with app.test_client() as client:
         yield client
@@ -14,7 +13,6 @@ def client():
 
 def _competitions_assigment(client, selected_competition, selected_club, placesRequired, message, time):
     """ Verify if the assignement is applied to the credit of the club 
-    
         Args:
         client (flask.testing.FlaskClient): _description_
         competition (str): _description_
@@ -89,14 +87,15 @@ def _get_num_of_place(client, competition_index):
     """
     
     rv = client.post("/showSummary", data=dict(email='admin@irontemple.com'), follow_redirects=True)
+    print(rv.data.decode())
     num_of_place = [int(x) for x in rv.data.decode().split() if x.isdigit()][competition_index]
     
     return num_of_place
 
 
 @pytest.mark.parametrize('competition, club, places, message, time, competition_index',
-                         [("Fall Classic", 'Iron Temple', 1, "Places available: 11", "2022-10-22 13:30:00", 2),
-                          ('Garigue Moutain', 'Iron Temple', 2, "Places available: 9", "2022-10-22 13:30:00", 1)])
+                         [('Garigue Moutain', 'Iron Temple', 1, 'Places available: 28', '2022-10-22 13:30:00', 1),
+                          ('Fall Classic', 'Iron Temple', 2, "Places available: 27", "2022-10-22 13:30:00", 2)])
 def test_places_substraction(client, competition, club, places, message, time, competition_index):
     """ Verify if the places substraction is working correctly
 
