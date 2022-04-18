@@ -1,4 +1,3 @@
-from requests import request
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import unittest
@@ -24,7 +23,6 @@ class FunctionnalTests(unittest.TestCase):
         self.driver.find_element_by_class_name('btn-info').click()
         assert self.driver.current_url == 'http://127.0.0.1:5000/purchasePlaces'
 
-
     def test_search_connection_with_display_board(self):
         self.good_connection()
         self.driver.find_element_by_class_name('btn-success').click()
@@ -39,7 +37,7 @@ class FunctionnalTests(unittest.TestCase):
     def tearDownClass(cls):
         cls.driver.close()
         cls.driver.quit()
-        print('----> Test Completed')
+        print('\n\n- End of functionnal tests -')
 
 
 if __name__ == '__main__':
