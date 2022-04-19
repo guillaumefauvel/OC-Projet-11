@@ -7,7 +7,9 @@ class FunctionnalTests(unittest.TestCase):
     
     @classmethod
     def setUpClass(cls):
-        cls.driver = webdriver.Chrome(ChromeDriverManager().install())
+        options = webdriver.ChromeOptions()
+        options.headless = True
+        cls.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         cls.driver.implicitly_wait(2)
         cls.driver.maximize_window()
     
