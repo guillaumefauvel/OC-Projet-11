@@ -1,4 +1,3 @@
-from pprint import pprint
 from re import L
 from flask import Flask, render_template, request, redirect, flash, url_for
 from datetime import datetime
@@ -6,14 +5,15 @@ from datetime import datetime
 from helpers.data_manager import loadCompetitions, loadClubs, saveClubs, saveCompetitions
 
 def create_app(mode):
-        
+    
     if mode == 'Production':
+        print('--- Server\'s database in production mode ---')
         clubs_db = 'database/clubs.json' 
         competitions_db = 'database/competitions.json'
-    elif mode == 'UnitTest':
+    elif mode == 'Debugging':
+        print('--- Server\'s database in debugging mode ---')
         clubs_db = 'tests/test_database/clubs.json' 
         competitions_db = 'tests/test_database/competitions.json'
-
 
     app = Flask(__name__)
     app.secret_key = 'something_special'
@@ -50,7 +50,6 @@ def create_app(mode):
                                competitions=competitions,
                                time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-
     @app.route('/invalidemail')
     def invalidEmail():
         """ 
@@ -84,7 +83,7 @@ def create_app(mode):
         elif foundClub and foundCompetition:
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
             
-
+            
     @app.route('/purchasePlaces',methods=['POST'])
     def purchasePlaces():
 
@@ -140,13 +139,12 @@ def create_app(mode):
         data_update(clubs, competitions)
         return render_template('welcome.html', club=club, competitions=competitions, time=actual_time)
 
-    # TODO: Add route for points display
 
     @app.route('/logout')
     def logout():
         return redirect(url_for('index'))
 
-    
+
     @app.route('/detailed-board')
     def detailed_board():
 
@@ -194,4 +192,4 @@ def create_app(mode):
     return app
 
 
-create_app(mode='UnitTest')
+create_app(mode='Debugging')

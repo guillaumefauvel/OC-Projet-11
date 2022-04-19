@@ -5,7 +5,7 @@ from server import create_app
 @pytest.fixture
 def client():
 
-    app = create_app(mode='UnitTest')
+    app = create_app(mode='Debugging')
 
     with app.test_client() as client:
         yield client
@@ -87,7 +87,7 @@ def _get_num_of_place(client, competition_index):
     """
     
     rv = client.post("/showSummary", data=dict(email='admin@irontemple.com'), follow_redirects=True)
-    print(rv.data.decode())
+
     num_of_place = [int(x) for x in rv.data.decode().split() if x.isdigit()][competition_index]
     
     return num_of_place

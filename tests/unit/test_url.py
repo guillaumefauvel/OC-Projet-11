@@ -5,7 +5,7 @@ from server import create_app
 @pytest.fixture
 def client():
 
-    app = create_app(mode='UnitTest')
+    app = create_app(mode='Debugging')
     with app.test_client() as client:
         yield client
 
