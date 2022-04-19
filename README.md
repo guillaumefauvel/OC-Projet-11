@@ -14,17 +14,19 @@
 ## Les tests unitaires / intégrations
 
 Les tests ont été réalisé avec pytest.  
-Pour les lancer, entrez `pytest -v` à la racine du projet.
-
+Pour les lancer, entrez `pytest -v` à la racine du projet.  
+Si vous souhaitez obtenir un rapport de couverture des tests lancer la commande `pytest --cov=. --cov-report html` à la racine du projet.  
+Le rapport sera accessible au ficher index.html dans le dossier htmlcov
 ## Les tests fonctionnels
 
 Les tests fonctionnels sont développés à l'aide de Selenium et du module Unittest.  
-Pour les lancer vous devez en premier lieu lancer le serveur en mode `Debugging` (CF - Lancement du projet 4.).  
+Pour les lancer vous devez en premier lieu lancer le serveur en mode `'Debugging'` (CF - Lancement du projet 4.).  
 Ensuite lancez à la racine du projet la commande `python .\tests\functionnal_tests\funtionnal_testing.py`
 
 ## Les tests de performance
 
 Pour fournir des tests de performance nous utilisons Locust.  
 Afin d'initialiser ce test, entrez à la racine la commande `cd .\tests\performance_tests\ ; locust`  
-Accéder à la plateforme de test en suivant ce lien : `http://localhost:8089`  
-Vous pourrez ainsi lancer la simulation de traffic.
+Accéder à la plateforme de test en suivant ce lien `http://localhost:8089`  
+Vous pourrez ainsi lancer la simulation de trafic.
+

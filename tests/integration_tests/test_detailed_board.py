@@ -90,9 +90,14 @@ def test_clean_data():
 
     clubs = clubs[:-1]
     competitions = competitions[:-1]
+
+    reference_clubs = [{'name': 'Simply Lift', 'email': 'john@simplylift.co', 'points': 25}, {'name': 'Iron Temple', 'email': 'admin@irontemple.com', 'points': 15}]
+    reference_competitions = [{'name': 'Garigue Moutain', 'date': '2022-12-15 14:30:00', 'total_place': 30, 'numberOfPlaces': 29, 'bookedPerClub': {'Iron Temple': 1}},
+                              {'name': 'Fall Classic', 'date': '2022-10-22 13:30:00', 'total_place': 30, 'numberOfPlaces': 29, 'bookedPerClub': {'Iron Temple': 1}},
+                              {'name': 'Lor Beach', 'date': '2020-12-15 14:30:00', 'total_place': 30, 'numberOfPlaces': 14, 'bookedPerClub': {'Iron Temple': 1}}]
     
-    saveCompetitions(competitions=competitions, competitions_db=COMPETITIONS_DB_REF)
-    saveClubs(clubs=clubs, clubs_db=CLUBS_DB_REF)
+    saveCompetitions(competitions=reference_competitions, competitions_db=COMPETITIONS_DB_REF)
+    saveClubs(clubs=reference_clubs, clubs_db=CLUBS_DB_REF)
     
     assert len(clubs) == num_of_clubs
     assert len(competitions) == num_of_competitions
