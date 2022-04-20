@@ -1,0 +1,25 @@
+{"competitions": [
+    {
+        "name": "Garigue Moutain",
+        "date": "2022-12-15 14:30:00",
+        "total_place": 30,
+        "numberOfPlaces": 29,
+        "bookedPerClub": {
+            "Iron Temple": 12,
+            "Simply Lift": 3,
+            "She Lifts": 7
+        }
+    },
+    {
+        "name": "Fall Classic",
+        "date": "2022-10-22 13:30:00",
+        "total_place": 30,
+        "numberOfPlaces": 29
+    },
+    {
+        "name": "Lor Beach",
+        "date": "2020-12-15 14:30:00",
+        "total_place": 30,
+        "numberOfPlaces": 14
+    }
+]}

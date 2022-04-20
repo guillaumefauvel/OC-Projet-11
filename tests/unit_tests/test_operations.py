@@ -9,6 +9,15 @@ def client():
 
     with app.test_client() as client:
         yield client
+        
+
+@pytest.fixture
+def client_with_fresh_db():
+    app = create_app(mode='Debugging-FreshDB')
+
+    with app.test_client() as client:
+        yield client
+
 
 
 def _competitions_assigment(client, selected_competition, selected_club, placesRequired, message, time):
@@ -114,6 +123,13 @@ def test_places_substraction(client, competition, club, places, message, time, c
     number_after = _get_num_of_place(client, competition_index)
 
     assert (number_before-places) == number_after
+
+
+
+def test_place_attribution_with_a_fresh_db(client_with_fresh_db):
+    
+    _competitions_assigment(client_with_fresh_db, 'Fall Classic', 'Iron Temple', 1, "Points available: 14", "2022-10-22 13:30:00")
+
 
 
 if __name__ == '__main__':

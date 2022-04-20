@@ -98,6 +98,6 @@ def test_clean_data():
     
     saveCompetitions(competitions=reference_competitions, competitions_db=COMPETITIONS_DB_REF)
     saveClubs(clubs=reference_clubs, clubs_db=CLUBS_DB_REF)
-    
+
     assert len(clubs) == num_of_clubs
     assert len(competitions) == num_of_competitions

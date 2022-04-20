@@ -14,6 +14,11 @@ def create_app(mode):
         print('--- Server\'s database in debugging mode ---')
         clubs_db = 'tests/test_database/clubs.json' 
         competitions_db = 'tests/test_database/competitions.json'
+    elif mode == 'Debugging-FreshDB':
+        print('--- Server\'s database in debugging mode ---')
+        clubs_db = 'tests/test_database/clubs_fresh_db.json' 
+        competitions_db = 'tests/test_database/competitions_fresh_db.json'
+
 
     app = Flask(__name__)
     app.secret_key = 'something_special'
@@ -121,9 +126,9 @@ def create_app(mode):
                     competition['bookedPerClub'][club['name']] += placesRequired
                     data_update(clubs, competitions)
             except KeyError:
+                competition['bookedPerClub'] = {}
                 competition['bookedPerClub'][club['name']] = placesRequired
                 data_update(clubs, competitions)
-
             competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
             club['points'] = int(club['points'])-placesRequired
             data_update(clubs, competitions)
@@ -159,27 +164,30 @@ def create_app(mode):
             ref_list = []
             
             for comp in competitions:
-                for associated_club in list(comp['bookedPerClub'].keys()):
-                    if associated_club == club_name:
-                        ref_list.append(comp['bookedPerClub'][club_name])
-                        try: 
-                            old_value = total_points_events[comp['name']]
-                            total_points_events[comp['name']] = old_value + comp['bookedPerClub'][club_name]
-                        except KeyError:
-                            total_points_events[comp['name']] = comp['bookedPerClub'][club_name]
-                    elif club_name not in list(comp['bookedPerClub'].keys()):
-                        ref_list.append(0)
+                try:
+                    for associated_club in list(comp['bookedPerClub'].keys()):
+                        if associated_club == club_name:
+                            ref_list.append(comp['bookedPerClub'][club_name])
+                            try: 
+                                old_value = total_points_events[comp['name']]
+                                total_points_events[comp['name']] = old_value + comp['bookedPerClub'][club_name]
+                            except KeyError:
+                                total_points_events[comp['name']] = comp['bookedPerClub'][club_name]
+                        elif club_name not in list(comp['bookedPerClub'].keys()):
+                            ref_list.append(0)
+                except KeyError:
+                    pass
 
                 if comp['date'] < actual_time:
                     comp['numberOfPlaces'] = 0
-                
+
             table[f'{club_name}'] = {
                 "points": club['points'],
                 "ref_list": ref_list,
             }
-            
+        
         clubs_total_points = sum([int(table[v]['points']) for v in table])
-                
+                 
         return render_template('display_detailed_board.html',
                                competitions=competitions,
                                table=table,
@@ -192,4 +200,4 @@ def create_app(mode):
     return app
 
 
-create_app(mode='Debugging')
+create_app(mode='Debugging-FreshDB')

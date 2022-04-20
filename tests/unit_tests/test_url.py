@@ -9,6 +9,15 @@ def client():
     with app.test_client() as client:
         yield client
 
+@pytest.fixture
+def client_with_fresh_db():
+    """ The 'fresh db' is database with less informations, 
+        In fact some competitions doesn't have booked per club attributes
+    """
+    app = create_app(mode='Debugging-FreshDB')
+    with app.test_client() as client:
+        yield client
+
 
 def test_login_page(client):
     rv = client.get("/", follow_redirects=True)
@@ -88,15 +97,23 @@ def test_booking_reservation(client, selected_competition, selected_club, places
     _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time)
 
 
-def test_display_board_url(client):
-    """ Verify if the access of /detailed-board if we are not logged in """
+def _display_board_check(client):
+    """ Verify the access of /detailed-board if we are not logged in """
     
     rv = client.get("/detailed-board", follow_redirects=True)
     url = "".join((flask.request.url).split("/")[3:])
-    
+
     assert rv.data.decode().find('GUDLFT - Detailed Board') != -1
     assert url == "detailed-board"
     assert rv.status_code == 200
+
+
+def test_display_board_url_fresh_db(client, client_with_fresh_db):
+
+    _display_board_check(client)
+
+    _display_board_check(client_with_fresh_db)
+
 
 
 def test_logout(client):
@@ -123,7 +140,6 @@ def test_booking_old_competitions(client):
 
     assert url == "purchasePlaces"
     assert rv.status_code == 200
-
 
 
 @pytest.mark.parametrize('url, expected_msg',
