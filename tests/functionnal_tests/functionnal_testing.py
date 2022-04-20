@@ -30,6 +30,11 @@ class FunctionnalTests(unittest.TestCase):
         self.driver.find_element(by=By.CLASS_NAME, value='btn-success').click()
         assert self.driver.current_url == 'http://127.0.0.1:5000/detailed-board'
 
+    def test_display_board_without_connection(self):
+        self.driver.get('http://127.0.0.1:5000')
+        self.driver.find_element(by=By.CLASS_NAME, value='btn-primary').click()
+        assert self.driver.current_url == 'http://127.0.0.1:5000/detailed-board'
+
     def test_search_connection_and_logout(self):
         self.good_connection()
         self.driver.find_element(by=By.CLASS_NAME, value='btn-danger').click()

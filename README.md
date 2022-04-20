@@ -21,7 +21,7 @@ Le rapport sera accessible au ficher index.html dans le dossier htmlcov
 
 Les tests fonctionnels sont développés à l'aide de Selenium et du module Unittest.  
 Pour les lancer vous devez en premier lieu lancer le serveur en mode `'Debugging'` (CF - Lancement du projet 4.).  
-Ensuite lancez à la racine du projet la commande `python .\tests\functionnal_tests\funtionnal_testing.py`
+Ensuite lancez à la racine du projet la commande `python .\tests\functionnal_tests\functionnal_testing.py`
 
 ## Les tests de performance
 
