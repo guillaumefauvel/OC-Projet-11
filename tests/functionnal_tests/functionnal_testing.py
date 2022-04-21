@@ -21,7 +21,7 @@ class FunctionnalTests(unittest.TestCase):
     def test_search_connection_with_booking(self):
         self.good_connection()
         self.driver.find_element(by=By.CLASS_NAME, value='btn-info').click()
-        self.driver.find_element(by=By.NAME, value='places').send_keys('2')
+        self.driver.find_element(by=By.NAME, value='places').send_keys('1')
         self.driver.find_element(by=By.CLASS_NAME, value='btn-info').click()
         assert self.driver.current_url == 'http://127.0.0.1:5000/purchasePlaces'
 

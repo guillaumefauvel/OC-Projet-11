@@ -5,15 +5,6 @@ from server import create_app
 @pytest.fixture
 def client():
 
-    app = create_app(mode='Debugging')
-    with app.test_client() as client:
-        yield client
-
-@pytest.fixture
-def client_with_fresh_db():
-    """ The 'fresh db' is database with less informations, 
-        In fact some competitions doesn't have booked per club attributes
-    """
     app = create_app(mode='Debugging-FreshDB')
     with app.test_client() as client:
         yield client
@@ -97,7 +88,7 @@ def test_booking_reservation(client, selected_competition, selected_club, places
     _competitions_assigment(client, selected_competition, selected_club, placesRequired, expected_msg, expected_url, time)
 
 
-def _display_board_check(client):
+def test_display_board_check(client):
     """ Verify the access of /detailed-board if we are not logged in """
     
     rv = client.get("/detailed-board", follow_redirects=True)
@@ -106,14 +97,6 @@ def _display_board_check(client):
     assert rv.data.decode().find('GUDLFT - Detailed Board') != -1
     assert url == "detailed-board"
     assert rv.status_code == 200
-
-
-def test_display_board_url_fresh_db(client, client_with_fresh_db):
-
-    _display_board_check(client)
-
-    _display_board_check(client_with_fresh_db)
-
 
 
 def test_logout(client):
