@@ -60,7 +60,7 @@ def test_competitions_numbers(client):
     rv = client.get("/detailed-board", follow_redirects=True)
         
     matches = re.findall(r'<th>(.*)<\/th>', rv.data.decode())
-    start_index = matches.index(" <strong>Points available</strong> ")
+    start_index = matches.index("Points available")
 
     list_of_competitions = matches[start_index+1:]
         

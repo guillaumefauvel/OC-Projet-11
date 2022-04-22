@@ -148,51 +148,32 @@ def create_app(mode):
     @app.route('/logout')
     def logout():
         return redirect(url_for('index'))
-
-
+    
     @app.route('/detailed-board')
     def detailed_board():
-
-        table = {}
-        total_points_events = {}
-
-        actual_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        for club in clubs:
-            club_name = club['name']
-
-            ref_list = []
-            
-            for comp in competitions:
-                try:
-                    for associated_club in list(comp['bookedPerClub'].keys()):
-                        if associated_club == club_name:
-                            ref_list.append(comp['bookedPerClub'][club_name])
-                            try: 
-                                old_value = total_points_events[comp['name']]
-                                total_points_events[comp['name']] = old_value + comp['bookedPerClub'][club_name]
-                            except KeyError:
-                                total_points_events[comp['name']] = comp['bookedPerClub'][club_name]
-                        elif club_name not in list(comp['bookedPerClub'].keys()):
-                            ref_list.append(0)
-                except KeyError:
-                    pass
-
-                if comp['date'] < actual_time:
-                    comp['numberOfPlaces'] = 0
-
-            table[f'{club_name}'] = {
-                "points": club['points'],
-                "ref_list": ref_list,
-            }
         
-        clubs_total_points = sum([int(table[v]['points']) for v in table])
-                 
+        first_row = [""] + [v['name'] for v in clubs] + ['Total', 'Available']
+        second_row = ["Points available"] + [v['points'] for v in clubs] + [sum([int(v['points']) for v in clubs])] + [""]
+        list_of_rows = []
+        
+        for competition in competitions:
+            
+            fresh_row = []
+            
+            for club in [v['name'] for v in clubs]:
+                try:
+                    fresh_row += [competition['bookedPerClub'][club]]
+                except:
+                    fresh_row += [0]
+            
+            finished_row = [competition['name']] + fresh_row + [sum(fresh_row)] + [competition['numberOfPlaces']]
+                                                                               
+            list_of_rows.append(finished_row)
+        
         return render_template('display_detailed_board.html',
-                               competitions=competitions,
-                               table=table,
-                               total_points_events=total_points_events,
-                               clubs_total_points=clubs_total_points)
+                        first_row=first_row,
+                        second_row=second_row,
+                        list_of_rows=list_of_rows)
     
     if __name__ == '__main__':
         app.run(debug=True)

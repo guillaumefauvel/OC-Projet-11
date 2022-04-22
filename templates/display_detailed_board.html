@@ -8,7 +8,6 @@
     <title>GUDLFT - Detailed Board</title>
     <style>
         table {border:1px solid black;}
-
         body {
             margin-left: 5%;
             margin-right: 10%;
@@ -24,34 +23,33 @@
     <table class="table">
         <thead class="sub">
             <tr>
-                <th></th>
-                {% for club in table %}
+                {% for club in first_row %}
                     <th>{{ club }}</th>
                 {% endfor %}
-                <th>Total</th>
-                <th>Available</th>
-            </tr>
-
-            <tr>
-                <th> <strong>Points available</strong> </th>            
-                {% for club in table %}
-                    <td>{{ table[club]['points'] }}</td>
-                {% endfor %}
-                <td>{{ clubs_total_points }}
             </tr>
         </thead>
-
-        {% for comp in competitions %}
-        {% set outer_loop = loop %}
             <tr>
-                <th>{{ comp['name'] }}</th>
-                {% for club in table %}
-                    <td>{{ table[club]['ref_list'][outer_loop.index0]}}</td>
+                {% for club in second_row %}
+                    {% if loop.index == 1%}
+                        <th>{{ club }}</th>
+                    {% else %}
+                        <td>{{ club }}</td>
+                    {% endif %}
+
                 {% endfor %}
-                <td>{{ total_points_events[comp['name']] }}</td>
-                <td>{{ comp['numberOfPlaces']|int }}</td>
+            </tr>
+        {% for competition in list_of_rows %}
+            <tr>
+                {% for value in competition %}
+                    {% if loop.index == 1%}
+                        <th>{{ value }}</th>
+                    {% else %}
+                        <td>{{ value }}</td>
+                    {% endif %}
+                {% endfor %}
             </tr>
         {% endfor %}
+
     </table>
 </body>
 </html>
