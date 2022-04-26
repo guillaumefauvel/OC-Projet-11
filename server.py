@@ -31,7 +31,8 @@ def create_app(mode):
         if mode == 'Production':
             saveClubs(clubs, clubs_db)
             saveCompetitions(competitions, competitions_db)
-        
+
+
     @app.route('/')
     def index():
         return render_template('index.html')
@@ -149,6 +150,7 @@ def create_app(mode):
     def logout():
         return redirect(url_for('index'))
     
+    
     @app.route('/detailed-board')
     def detailed_board():
         
@@ -171,9 +173,9 @@ def create_app(mode):
             list_of_rows.append(finished_row)
         
         return render_template('display_detailed_board.html',
-                        first_row=first_row,
-                        second_row=second_row,
-                        list_of_rows=list_of_rows)
+                                first_row=first_row,
+                                second_row=second_row,
+                                list_of_rows=list_of_rows)
     
     if __name__ == '__main__':
         app.run(debug=True)

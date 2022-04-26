@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <title>Booking for {{competition['name']}} || GUDLFT</title>
+    <link rel="stylesheet" href="static/styles.css">
     <style>
-        body {
+        .booking {
             background-color: #d6d6d6;
             color: rgb(0, 0, 0);
             display:block;
@@ -16,21 +16,21 @@
             margin: auto;
             margin-top: 7%;
         }
-
     </style>
 </head>
-<body>
-    <h2>{{competition['name']}}</h2>
-    {% with messages = get_flashed_messages()%}
+
+<body class="booking">
+    <h2> {{ competition['name'] }} </h2>
+    {% with messages = get_flashed_messages() %}
         {% if messages %}
-            <span class="badge badge-warning">{{ messages[0] }}</span>
+            <span class="badge badge-warning"> {{ messages[0] }} </span>
             <br></br>
-        {% endif%}
-    {%endwith%}
-    Places available: {{competition['numberOfPlaces']}}/{{ competition['total_place'] }}
+        {% endif %}
+    {% endwith %}
+    Places available: {{ competition['numberOfPlaces'] }}/{{ competition['total_place'] }}
     <form action="/purchasePlaces" method="post">
-        <input type="hidden" name="club" value="{{club['name']}}">
-        <input type="hidden" name="competition" value="{{competition['name']}}">
+        <input type="hidden" name="club" value="{{ club['name'] }}">
+        <input type="hidden" name="competition" value="{{ competition['name'] }}">
         <label for="places">How many places? &nbsp;&nbsp; </label>
         <input type="number" name="places" id=""/> &nbsp;
         <button class="btn btn-info btn-sm" type="submit">Book</button>

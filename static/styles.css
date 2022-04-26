@@ -1,0 +1,35 @@
+table {border:1px solid black;}
+body {
+    margin-left: 5%;
+    margin-right: 10%;
+    background-color: #d6d6d6;
+    color: rgb(0, 0, 0);
+}
+.booking {
+    background-color: #d6d6d6;
+    color: rgb(0, 0, 0);
+    display:block;
+    width:30%;
+    margin: auto;
+    margin-top: 7%;
+}
+
+.close-competition {
+    background-color: #d6d6d6;
+    color: rgb(0, 0, 0);
+    margin-left: 3%;
+  }
+
+.jumbotron {
+    background-color: #474544;
+    color: #fff;
+}
+
+.welcome-page {
+    background-color: #d6d6d6;
+    color: rgb(0, 0, 0);
+    margin-left: 3%;
+}
+.progress {
+    width: 50%;
+}
