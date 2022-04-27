@@ -1,6 +1,7 @@
 from re import L
-from flask import Flask, render_template, request, redirect, flash, url_for
 from datetime import datetime
+
+from flask import Flask, render_template, request, redirect, flash, url_for
 
 from helpers.data_manager import loadCompetitions, loadClubs, saveClubs, saveCompetitions
 
@@ -27,7 +28,11 @@ def create_app(mode):
     clubs = loadClubs(clubs_db)
 
     def data_update(clubs, competitions):
-
+        """ Update the database if the server's mode is 'Production'
+        Args:
+            clubs (list): club's dataset
+            competitions (list): competitions's dataset
+        """
         if mode == 'Production':
             saveClubs(clubs, clubs_db)
             saveCompetitions(competitions, competitions_db)
@@ -35,6 +40,7 @@ def create_app(mode):
 
     @app.route('/')
     def index():
+
         return render_template('index.html')
 
 
@@ -74,7 +80,12 @@ def create_app(mode):
 
     @app.route('/book/<competition>/<club>')
     def book(competition,club):
-        
+        """ Return the correct template of an event book page.
+            If the event doesn't exist it redirect to the summary page
+        Args:
+            competition (list): club's dataset
+            club (list): competiton's dataset
+        """
         actual_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         try:        
@@ -92,6 +103,7 @@ def create_app(mode):
             
     @app.route('/purchasePlaces',methods=['POST'])
     def purchasePlaces():
+        """ Use the credit specified to book an event. """
 
         selected_competition = request.form['competition']
         selected_club = request.form['club']
@@ -148,11 +160,13 @@ def create_app(mode):
 
     @app.route('/logout')
     def logout():
+        """ Logout and redirect the user to the login page """
         return redirect(url_for('index'))
     
     
     @app.route('/detailed-board')
     def detailed_board():
+        """ Show the board that recap clubs and competitions booking's history and credits """
         
         first_row = [""] + [v['name'] for v in clubs] + ['Total', 'Available']
         second_row = ["Points available"] + [v['points'] for v in clubs] + [sum([int(v['points']) for v in clubs])] + [""]
@@ -183,4 +197,4 @@ def create_app(mode):
     return app
 
 
-create_app(mode='Debugging-FreshDB')
+create_app(mode='Debugging')

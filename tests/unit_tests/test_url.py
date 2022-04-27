@@ -1,6 +1,8 @@
 import pytest
 import flask
+
 from server import create_app
+
 
 @pytest.fixture
 def client():
@@ -126,7 +128,7 @@ def test_booking_old_competitions(client):
 
 
 @pytest.mark.parametrize('url, expected_msg',
-                         [("book/Lor%20Beach/Iron%20Temple", "This competitons is close"),
+                         [("book/Lor%20Beach/Iron%20Temple", "This competitions is close"),
                           ("book/bad%20Beach/bad%20Temple", "Something went wrong-please try again")])
 def test_purchase_page_with_invalid_competitions(client, url, expected_msg):
     """ Verify if booking an old or an invalid competitions is filtered """

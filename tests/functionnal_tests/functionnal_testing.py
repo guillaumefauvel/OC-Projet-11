@@ -46,5 +46,6 @@ class FunctionnalTests(unittest.TestCase):
         cls.driver.quit()
         print('\n\n- End of functionnal tests -')
 
+
 if __name__ == '__main__':
     unittest.main()

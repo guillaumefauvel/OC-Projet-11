@@ -1,6 +1,8 @@
 import unittest
 import pytest
+
 from server import create_app
+
 
 @pytest.fixture
 def client():
@@ -126,5 +128,3 @@ def test_place_attribution_with_a_fresh_db(client_with_fresh_db):
     
     _competitions_assigment(client_with_fresh_db, 'Fall Classic', 'Iron Temple', 1, "Points available: 14", "2022-10-22 13:30:00")
 
-if __name__ == '__main__':
-    unittest.main()
