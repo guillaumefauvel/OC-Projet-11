@@ -27,6 +27,7 @@ def create_app(mode):
     competitions = loadCompetitions(competitions_db)
     clubs = loadClubs(clubs_db)
 
+
     def data_update(clubs, competitions):
         """ Update the database if the server's mode is 'Production'
         Args:
